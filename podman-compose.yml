@@ -1,7 +1,7 @@
 services:
 
   wordpress:
-    image: soulteary/sqlite-wordpress:latset
+    image: soulteary/sqlite-wordpress:latest
     restart: always
     ports:
       # Safe local default. Change this only when intentionally publishing the
