@@ -1,42 +1,13 @@
-version: '3'  # 指定 Compose 语法版本
 services:
-  # MySQL 服务配置
-  db:
-    image: library/mysql:latest
-    container_name: wp-mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: 311737  # 自定义 root 密码
-      MYSQL_DATABASE: wordpress       # 自动创建数据库
-      MYSQL_USER: wenxuan              # 数据库用户
-      MYSQL_PASSWORD: hwx54188      # 数据库密码
-    volumes:
-      - ./mysql:/var/lib/mysql        # 挂载 MySQL 数据目录
-    restart: always  # 自动重启
-    networks:
-      - wp-network  # 加入自定义网络（隔离其他服务）
-  # WordPress 服务配置
+
   wordpress:
-    image: library/wordpress:latest
-    container_name: wp-service
-    depends_on:
-      - db  # 先启动 db 服务再启动 WordPress
-    environment:
-      WORDPRESS_DB_HOST: db           # 数据库地址（对应 db 服务名）
-      WORDPRESS_DB_USER: wenxuan       # 数据库用户（与 db 配置一致）
-      WORDPRESS_DB_PASSWORD: hwx54188  # 数据库密码（与 db 配置一致）
-      WORDPRESS_DB_NAME: wordpress    # 数据库名称（与 db 配置一致）
-      TZ: Asia/Shanghai               # 时区配置
-    ports:
-      - "80:80"                       # 端口映射
-      - "443:443"                     # 预留 HTTPS 端口
-    volumes:
-      - ./html:/var/www/html          # 挂载网页目录
-      #- ./wp-content:/var/www/html/wp-content  # 挂载插件/主题目录
-      - ./logs:/var/log/apache2       # 挂载日志目录
-      #- ./conf:/etc/apache2/conf-enabled  # 挂载配置目录
+    build:
+      context: .
+    image: sqlite-wordpress:main
     restart: always
-    networks:
-      - wp-network
-# 自定义网络（隔离容器）
-networks:
-  wp-network:
+    ports:
+      # Safe local default. Change this only when intentionally publishing the
+      # site through a firewall or TLS reverse proxy.
+      - 127.0.0.1:8080:80
+    volumes:
+      - ./wordpress:/var/www/html
