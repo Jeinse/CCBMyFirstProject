@@ -1,13 +1,11 @@
 services:
 
   wordpress:
-    build:
-      context: .
-    image: sqlite-wordpress:main
+    image: soulteary/sqlite-wordpress:latset
     restart: always
     ports:
       # Safe local default. Change this only when intentionally publishing the
       # site through a firewall or TLS reverse proxy.
-      - 127.0.0.1:8080:80
+      - "80:80"
     volumes:
       - ./wordpress:/var/www/html
